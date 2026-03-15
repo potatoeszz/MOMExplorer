@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Monmouth County Wukong RPG</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,13 +17,21 @@
     <button id="panUp" type="button">Pan Up</button>
     <button id="panDown" type="button">Pan Down</button>
     <button id="resetPan" type="button">Reset View</button>
-    <span>Map offset: <strong id="offsetLabel">0,0</strong></span>
+    <button id="zoomIn" type="button">Zoom In</button>
+    <button id="zoomOut" type="button">Zoom Out</button>
+    <button id="resetZoom" type="button">Reset Zoom</button>
+    <button id="gpsButton" type="button">Set to GPS</button>
+    <span>Offset: <strong id="offsetLabel">0,0</strong></span>
+    <span>Zoom: <strong id="zoomLabel">100%</strong></span>
   </div>
 
   <div class="game-shell" id="gameShell">
-    <iframe id="mapIframe" src="https://www.google.com/maps?q=Monmouth+County+NJ&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" aria-label="Monmouth County Google Map background"></iframe>
-    <canvas id="gameCanvas" width="900" height="600" aria-label="Monmouth County RPG map"></canvas>
+    <div id="leafletMap" aria-label="Monmouth County interactive map"></div>
     <div id="hud">
+      <div>Position: <span id="pos">0,0</span></div>
+      <div>Landmark: <span id="landmark">None</span></div>
+      <div>Action: <span id="action">Move with arrows</span></div>
+    </div>
       <div>Position: <span id="pos">0,0</span></div>
       <div>Landmark: <span id="landmark">None</span></div>
       <div>Action: <span id="action">Move with arrows</span></div>
@@ -38,6 +47,7 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

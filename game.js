@@ -1,5 +1,3 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
 const posEl = document.getElementById('pos');
 const landmarkEl = document.getElementById('landmark');
 const actionEl = document.getElementById('action');
@@ -7,270 +5,178 @@ const popup = document.getElementById('popup');
 const popupTitle = document.getElementById('popup-title');
 const popupText = document.getElementById('popup-text');
 const popupClose = document.getElementById('popup-close');
-const mapIframe = document.getElementById('mapIframe');
-const offsetLabel = document.getElementById('offsetLabel');
-const panLeft = document.getElementById('panLeft');
-const panRight = document.getElementById('panRight');
-const panUp = document.getElementById('panUp');
-const panDown = document.getElementById('panDown');
-const resetPan = document.getElementById('resetPan');
+const gpsButton = document.getElementById('gpsButton');
 
-const camera = { x: 0, y: 0 };
+const monmouthCenter = [40.324, -74.2585];
+const map = L.map('leafletMap', { zoomControl: true }).setView(monmouthCenter, 11);
 
-function updatePan() {
-  mapIframe.style.transform = `translate(${camera.x}px, ${camera.y}px)`;
-  offsetLabel.textContent = `${Math.round(camera.x)}, ${Math.round(camera.y)}`;
-}
-
-panLeft.addEventListener('click', () => { camera.x -= 30; updatePan(); });
-panRight.addEventListener('click', () => { camera.x += 30; updatePan(); });
-panUp.addEventListener('click', () => { camera.y -= 30; updatePan(); });
-panDown.addEventListener('click', () => { camera.y += 30; updatePan(); });
-resetPan.addEventListener('click', () => { camera.x = 0; camera.y = 0; updatePan(); });
-
-updatePan();
-
-const TILE = 60;
-const MAP_W = 15;
-const MAP_H = 10;
-
-const map = {
-  width: MAP_W * TILE,
-  height: MAP_H * TILE
-};
-
-const mapBounds = {
-  latMin: 40.121,
-  latMax: 40.470,
-  lonMin: -74.350,
-  lonMax: -73.840
-};
-
-function geoToCanvas(lat, lon) {
-  const x = ((lon - mapBounds.lonMin) / (mapBounds.lonMax - mapBounds.lonMin)) * map.width;
-  const y = ((mapBounds.latMax - lat) / (mapBounds.latMax - mapBounds.latMin)) * map.height;
-  return { x, y };
-}
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18,
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
 const landmarks = [
-  {
-    id: 'asbury',
-    name: 'Asbury Park Boardwalk',
-    lat: 40.2206,
-    lon: -73.9870,
-    radius: 14,
-    description:
-      'Asbury Park Boardwalk is a legendary Jersey Shore destination with a historic roller coaster, vintage arcades, and a deep rock & roll heritage tied to the Stone Pony and Bruce Springsteen.'
-  },
-  {
-    id: 'monmouth',
-    name: 'Monmouth Battlefield State Park',
-    lat: 40.3052,
-    lon: -74.2132,
-    radius: 14,
-    description:
-      'Monmouth Battlefield preserves the 1778 Revolutionary War battlefield where George Washington faced British forces; it features tours, reenactments, an interpretive center, and peaceful walking trails.'
-  },
-  {
-    id: 'twin',
-    name: 'Twin Lights of Navesink',
-    lat: 40.4684,
-    lon: -74.0163,
-    radius: 14,
-    description:
-      'Twin Lights are two historic lighthouse towers on the Navesink Highlands near Sandy Hook; they helped advance lighthouse optics and offer wide views of New York Harbor and the Atlantic Ocean.'
-  },
-  {
-    id: 'freehold',
-    name: 'Freehold Raceway',
-    lat: 40.2456,
-    lon: -74.2650,
-    radius: 14,
-    description:
-      'Freehold Raceway, established in 1830, is among the nation\'s oldest harness racetracks. It hosts major trotting races, community events, and lively entertainment.'
-  }
+  { id: 'asbury', name: 'Asbury Park Boardwalk', lat: 40.2206, lon: -73.9870, radiusMeters: 450,
+    description: 'Asbury Park Boardwalk has been a cultural center since the late 19th century. It was a major African American leisure destination during segregation, then reinvented as a major rock music mecca with the Stone Pony (Springsteen, Bon Jovi). The boardwalk is now a case study in urban renewal and coastal tourism.' },
+  { id: 'monmouth', name: 'Monmouth Battlefield State Park', lat: 40.3052, lon: -74.2132, radiusMeters: 450,
+    description: 'Monmouth Battlefield is the site of the 1778 Revolutionary War battle where George Washington deployed one of the Continental Army\'s first large field tests against British regulars. The battle affirmed the army\'s endurance through torrential heat, introduced stricter drill discipline by von Steuben, and helped keep New Jersey under American control.' },
+  { id: 'twin', name: 'Twin Lights of Navesink', lat: 40.4684, lon: -74.0163, radiusMeters: 450,
+    description: 'Twin Lights (completed 1862; rebuilt 1867) were the first U.S. station to use both dioptric and catadioptric lenses. They served as a key coastal signal station through two world wars and as an early U.S. Coast Guard beacon. The museum includes 19th-century Fresnel lens history and maritime radio exhibits.' },
+  { id: 'freehold', name: 'Freehold Raceway', lat: 40.2456, lon: -74.2650, radiusMeters: 450,
+    description: 'Freehold Raceway, a harness racing venue since 1830, influenced the growth of the Standardbred breed and American race betting culture. It remains one of only two historic trotting tracks still in operation, hosting the New Jersey Sires Stakes and preserving equestrian traditions in Monmouth County.' },
+  { id: 'sandyhook', name: 'Sandy Hook Lighthouse', lat: 40.4661, lon: -74.0120, radiusMeters: 450,
+    description: 'Sandy Hook Lighthouse (first lit 1764) is the oldest working lighthouse in the United States. It guided colonial and early federal shipping into New York Harbor, and the surrounding Sandy Hook Fort Hancock served as a U.S. Coast Artillery post defending the port from 1895 to 1950.' },
+  { id: 'allaire', name: 'Allaire Historic Village', lat: 40.2747, lon: -74.1472, radiusMeters: 450,
+    description: 'Allaire Historic Village is a restored 1830s ironworks community once known for railroad car wheels and machinery. It demonstrates early industrialization, water-powered iron production, 19th-century worker housing, and the transition from charcoal to anthracite fuel in American manufacturing.' },
+  { id: 'freeholdcourt', name: 'Freehold Historic District', lat: 40.2570, lon: -74.2830, radiusMeters: 350,
+    description: 'Freehold Historic District includes the 1715 Monmouth County Courthouse and Remnants of the 1778 Freehold Tea Party. It is tied to Revolutionary rhetoric, later 19th-century Victorian rebuilding after fire, and a historical downtown that served as a county government and commerce hub.' }
 ];
 
+const landmarkLayerGroup = L.layerGroup().addTo(map);
 landmarks.forEach(l => {
-  const pt = geoToCanvas(l.lat, l.lon);
-  l.x = pt.x;
-  l.y = pt.y;
+  const marker = L.circle([l.lat, l.lon], {
+    radius: l.radiusMeters,
+    color: '#4f93a1',
+    fillColor: '#4f93a1',
+    fillOpacity: 0.25,
+    weight: 2
+  }).addTo(landmarkLayerGroup);
+
+  const pin = L.circleMarker([l.lat, l.lon], {
+    radius: 8,
+    color: '#033',
+    fillColor: '#6cf',
+    fillOpacity: 1
+  }).addTo(landmarkLayerGroup);
+
+  pin.bindPopup(`<strong>${l.name}</strong><br>${l.description}`);
+  l.marker = marker;
+  l.pin = pin;
 });
 
-const playerStart = geoToCanvas(40.2206, -73.9870);
-
 const player = {
-  x: playerStart.x,
-  y: playerStart.y,
-  size: 22,
-  speed: 2.8,
-  color: '#f1b33f',
-  staff: true,
-  direction: 0
+  lat: 40.2206,
+  lon: -73.9870,
+  speedDeg: 0.1,
+  marker: null
 };
 
-const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, w: false, a: false, s: false, d: false };
-let currentLandmark = null;
+const moveState = {
+  up: false,
+  down: false,
+  left: false,
+  right: false
+};
 
-function worldToScreen(x) { return x; }
-
-function drawGrid() {
-  ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= MAP_W; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * TILE, 0);
-    ctx.lineTo(i * TILE, map.height);
-    ctx.stroke();
-  }
-  for (let j = 0; j <= MAP_H; j++) {
-    ctx.beginPath();
-    ctx.moveTo(0, j * TILE);
-    ctx.lineTo(map.width, j * TILE);
-    ctx.stroke();
-  }
-  ctx.fillStyle = 'rgba(255,255,255,0.06)';
-  ctx.fillRect(0, 0, map.width, map.height);
-  ctx.restore();
+function createPlayer() {
+  player.marker = L.circleMarker([player.lat, player.lon], {
+    radius: 10,
+    color: '#d47f0c',
+    fillColor: '#f1b33f',
+    fillOpacity: 1,
+    weight: 2
+  }).addTo(map);
+  player.marker.bindPopup('Wukong hero');
 }
 
-function drawLandmarks() {
-  landmarks.forEach(l => {
-    ctx.save();
-    ctx.fillStyle = '#4f93a1';
-    ctx.globalAlpha = 0.30;
-    ctx.beginPath();
-    ctx.arc(l.x, l.y, l.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = '#f7f9ff';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(l.x, l.y, l.radius, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = '#224';
-    ctx.font = 'bold 12px Arial';
-    ctx.fillText(l.name, l.x + l.radius + 4, l.y + 4);
-    ctx.restore();
-  });
+createPlayer();
+
+function setPlayerPosition(lat, lon) {
+  player.lat = lat;
+  player.lon = lon;
+  player.marker.setLatLng([lat, lon]);
+  map.panTo([lat, lon], { animate: true, duration: 0.2 });
+  checkLandmarks();
+  posEl.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
 }
 
-function drawPlayer() {
-  ctx.save();
-  ctx.translate(player.x, player.y);
-  ctx.beginPath();
-  ctx.fillStyle = player.color;
-  ctx.arc(0, 0, player.size, 0, Math.PI*2);
-  ctx.fill();
-  ctx.strokeStyle = '#653b12';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  if (player.staff) {
-    ctx.strokeStyle = '#d1a655';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(0, -player.size*0.3);
-    const dx = Math.cos(player.direction); const dy = Math.sin(player.direction);
-    ctx.lineTo(dx * 42, dy * 42);
-    ctx.stroke();
-  }
-  ctx.restore();
-}
-
-function clampPlayer() {
-  player.x = Math.max(player.size, Math.min(map.width - player.size, player.x));
-  player.y = Math.max(player.size, Math.min(map.height - player.size, player.y));
-}
-
-function updatePlayer() {
-  let dx = 0, dy = 0;
-  if (keys.ArrowUp || keys.w) dy -= 1;
-  if (keys.ArrowDown || keys.s) dy += 1;
-  if (keys.ArrowLeft || keys.a) dx -= 1;
-  if (keys.ArrowRight || keys.d) dx += 1;
-  if (dx || dy) {
-    const len = Math.hypot(dx, dy);
-    dx = (dx / len) * player.speed;
-    dy = (dy / len) * player.speed;
-    player.x += dx;
-    player.y += dy;
-    player.direction = Math.atan2(dy, dx);
-  }
-  clampPlayer();
+function distanceInMeters(a, b) {
+  const toRad = angle => (angle * Math.PI) / 180;
+  const R = 6371000;
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+  const sinDLat = Math.sin(dLat / 2);
+  const sinDLon = Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLon * sinDLon), Math.sqrt(1 - (sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLon * sinDLon)));
+  return R * c;
 }
 
 function checkLandmarks() {
-  const found = landmarks.find(l => {
-    const distance = Math.hypot(player.x - l.x, player.y - l.y);
-    return distance <= l.radius + player.size * 0.6;
-  });
-  currentLandmark = found || null;
+  const playerPos = { lat: player.lat, lon: player.lon };
+  const nearby = landmarks.find(l => distanceInMeters(playerPos, { lat: l.lat, lon: l.lon }) <= l.radiusMeters + 30);
+  currentLandmark = nearby || null;
   landmarkEl.textContent = currentLandmark ? currentLandmark.name : 'None';
   actionEl.textContent = currentLandmark ? 'Press Space/Enter to inspect' : 'Move with arrows';
 }
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+let currentLandmark = null;
 
-  drawGrid();
-  drawLandmarks();
-  drawPlayer();
-
-  posEl.textContent = `${Math.round(player.x)}, ${Math.round(player.y)}`;
-}
-
-function gameLoop() {
-  updatePlayer();
-  checkLandmarks();
-  draw();
-  requestAnimationFrame(gameLoop);
-}
-
-function openLandmark(l) {
-  if (!l) return;
-  popupTitle.textContent = l.name;
-  popupText.textContent = l.description;
+function inspectLandmark() {
+  if (!currentLandmark) return;
+  popupTitle.textContent = currentLandmark.name;
+  popupText.textContent = currentLandmark.description;
   popup.classList.remove('hidden');
 }
 
-function closePopup() {
-  popup.classList.add('hidden');
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp' || e.key === 'w') moveState.up = true;
+  if (e.key === 'ArrowDown' || e.key === 's') moveState.down = true;
+  if (e.key === 'ArrowLeft' || e.key === 'a') moveState.left = true;
+  if (e.key === 'ArrowRight' || e.key === 'd') moveState.right = true;
+  if (e.key === ' ' || e.key === 'Enter') inspectLandmark();
+});
+
+window.addEventListener('keyup', e => {
+  if (e.key === 'ArrowUp' || e.key === 'w') moveState.up = false;
+  if (e.key === 'ArrowDown' || e.key === 's') moveState.down = false;
+  if (e.key === 'ArrowLeft' || e.key === 'a') moveState.left = false;
+  if (e.key === 'ArrowRight' || e.key === 'd') moveState.right = false;
+});
+
+popupClose.addEventListener('click', () => { popup.classList.add('hidden'); });
+
+if (navigator.geolocation) {
+  gpsButton.addEventListener('click', () => {
+    navigator.geolocation.getCurrentPosition(pos => {
+      setPlayerPosition(pos.coords.latitude, pos.coords.longitude);
+      map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+    }, () => { alert('GPS failed'); }, { enableHighAccuracy: true });
+  });
+} else {
+  gpsButton.disabled = true;
+  gpsButton.textContent = 'GPS unsupported';
 }
 
-window.addEventListener('keydown', (e) => {
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) {
-    keys[e.key] = true;
-    e.preventDefault();
+let lastFrame = null;
+
+function step(timestamp) {
+  if (lastFrame === null) lastFrame = timestamp;
+  const delta = (timestamp - lastFrame) / 1000;
+  lastFrame = timestamp;
+
+  let vx = 0;
+  let vy = 0;
+  if (moveState.up) vy += 1;
+  if (moveState.down) vy -= 1;
+  if (moveState.left) vx -= 1;
+  if (moveState.right) vx += 1;
+
+  if (vx !== 0 || vy !== 0) {
+    const norm = Math.hypot(vx, vy);
+    vx /= norm;
+    vy /= norm;
+
+    const latDelta = vy * player.speedDeg * delta;
+    const lonDelta = vx * player.speedDeg * delta / Math.cos(player.lat * Math.PI / 180);
+
+    setPlayerPosition(player.lat + latDelta, player.lon + lonDelta);
   }
-  if (e.key === ' ' || e.key === 'Enter') {
-    if (popup.classList.contains('hidden')) {
-      if (currentLandmark) openLandmark(currentLandmark);
-    } else {
-      closePopup();
-    }
-    e.preventDefault();
-  }
-});
 
-window.addEventListener('keyup', (e) => {
-  if (keys[e.key] !== undefined) {
-    keys[e.key] = false;
-  }
-});
+  requestAnimationFrame(step);
+}
 
-popupClose.addEventListener('click', closePopup);
-
-canvas.addEventListener('click', (event) => {
-  const rect = canvas.getBoundingClientRect();
-  player.x = event.clientX - rect.left;
-  player.y = event.clientY - rect.top;
-  clampPlayer();
-});
-
-window.addEventListener('resize', () => {
-  // preserve our design; canvas is fixed 900x600
-});
-
-requestAnimationFrame(gameLoop);
+setPlayerPosition(player.lat, player.lon);
+checkLandmarks();
+requestAnimationFrame(step);
