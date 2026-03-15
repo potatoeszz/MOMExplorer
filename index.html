@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monmouth County Wukong RPG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Monmouth County Wukong RPG</h1>
+  <p>Use arrow keys (or WASD) to move the monkey-hero across Monmouth County. Reach landmarks and press Space or Enter to inspect.</p>
+
+  <div id="controls">
+    <button id="panLeft" type="button">Pan Left</button>
+    <button id="panRight" type="button">Pan Right</button>
+    <button id="panUp" type="button">Pan Up</button>
+    <button id="panDown" type="button">Pan Down</button>
+    <button id="resetPan" type="button">Reset View</button>
+    <span>Map offset: <strong id="offsetLabel">0,0</strong></span>
+  </div>
+
+  <div class="game-shell" id="gameShell">
+    <iframe id="mapIframe" src="https://www.google.com/maps?q=Monmouth+County+NJ&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" aria-label="Monmouth County Google Map background"></iframe>
+    <canvas id="gameCanvas" width="900" height="600" aria-label="Monmouth County RPG map"></canvas>
+    <div id="hud">
+      <div>Position: <span id="pos">0,0</span></div>
+      <div>Landmark: <span id="landmark">None</span></div>
+      <div>Action: <span id="action">Move with arrows</span></div>
+    </div>
+  </div>
+
+  <div id="popup" class="hidden">
+    <div id="popup-content">
+      <button id="popup-close" title="Close">✕</button>
+      <h3 id="popup-title"></h3>
+      <p id="popup-text"></p>
+      <small>Press Space/Enter again to keep exploring.</small>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
