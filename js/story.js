@@ -8,10 +8,10 @@
  */
 
 const Story = (() => {
-  const NAME_KEY       = 'momexplorer_name';
-  const POS_KEY        = 'momexplorer_pos';
-  const STATE_KEY      = 'momexplorer_state';
-  const INTRO_SEEN_KEY = 'momexplorer_intro_seen';
+  const NAME_KEY       = 'wukongquest_name';
+  const POS_KEY        = 'wukongquest_pos';
+  const STATE_KEY      = 'wukongquest_state';
+  const INTRO_SEEN_KEY = 'wukongquest_intro_seen';
 
   // Default story data — fetch overrides if available (fallback for file:// or offline)
   let storyData = {
@@ -103,7 +103,7 @@ const Story = (() => {
     function getName() {
       const name = nameInput.value.trim();
       if (name) localStorage.setItem(NAME_KEY, name);
-      return name || 'Detective';
+      return name || 'Disciple';
     }
 
     function dismissModal(name) {
@@ -154,7 +154,7 @@ const Story = (() => {
 
   function updateHudName(name) {
     const el = document.getElementById('hud-title');
-    if (el) el.textContent = `🔍 Detective ${name}`;
+    if (el) el.textContent = `� Disciple ${name}`;
   }
 
   // ---- Chapter banner ----
@@ -189,7 +189,7 @@ const Story = (() => {
     const inner = document.getElementById('finale-inner');
     inner.innerHTML = '';
 
-    const detectiveName = localStorage.getItem(NAME_KEY) || 'Detective';
+    const detectiveName = localStorage.getItem(NAME_KEY) || 'Disciple';
     const dominantTag   = Game.getDominantTag();
     const endings       = storyData?.finale_endings || {};
     const endingText    = endings[dominantTag] || endings['unknown'] || storyData?.finale_conclusion || '';
@@ -249,7 +249,7 @@ const Story = (() => {
             <div class="journal-cover-label">The Chronicle of</div>
             <div class="journal-cover-title">Dr. Elias Farrow</div>
             <div class="journal-cover-divider">— ✦ —</div>
-            <div class="journal-cover-detective">Investigated by Detective ${page.name}</div>
+            <div class="journal-cover-detective">Journeyed by Disciple ${page.name}</div>
             <div class="journal-cover-date">Monmouth County, New Jersey</div>
           </div>
         `;

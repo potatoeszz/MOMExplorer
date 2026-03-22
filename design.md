@@ -2,7 +2,7 @@
 
 ## Overview
 
-MOMExplorer is a GPS-based historical exploration web app for Monmouth County, NJ. Players physically visit real historical sites; at each location they unlock a Sherlock Holmes–style mini-mystery grounded in actual local history.
+MOMExplorer is a GPS-based adventure web app themed around Sun Wukong's Journey to the West. Players physically visit locations inspired by the classic Chinese novel; at each location they unlock a mystery or challenge grounded in the Monkey King's legendary quest.
 
 ---
 
@@ -24,7 +24,7 @@ MOMExplorer is a GPS-based historical exploration web app for Monmouth County, N
 | Map tiles | OpenStreetMap via Leaflet default | Free, community-maintained |
 | GPS | `navigator.geolocation.watchPosition` | Built into every modern browser |
 | Proximity math | Haversine formula (custom, ~20 lines) | No dependency needed |
-| Fonts | Google Fonts: Cinzel + Lora | Victorian serif aesthetic, free |
+| Fonts | Google Fonts: Cinzel + Lora | Epic fantasy aesthetic, free |
 | State | `localStorage` | Simple, zero infrastructure |
 
 ---
@@ -35,7 +35,7 @@ MOMExplorer is a GPS-based historical exploration web app for Monmouth County, N
 MOMExplorer/
 ├── index.html          # App shell, layout, Leaflet CDN imports
 ├── css/
-│   └── style.css       # Victorian detective theme
+│   └── style.css       # Wukong adventure theme
 ├── js/
 │   ├── map.js          # Leaflet map init, marker management
 │   ├── gps.js          # watchPosition, Haversine, unlock events

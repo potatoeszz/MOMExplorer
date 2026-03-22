@@ -15,8 +15,8 @@ const PlayerGame = (() => {
   const UNLOCK_DIST_M = 450;         // metres to unlock a site
   const BTN_STEP      = 0.00020;     // per D-pad button click
   const START_POS     = [40.32, -74.17];
-  const POS_KEY       = 'momexplorer_pos';
-  const SPEED_KEY     = 'momexplorer_speed';
+  const POS_KEY       = 'wukongquest_pos';
+  const SPEED_KEY     = 'wukongquest_speed';
 
   let playerPos    = [...START_POS];
   let playerMarker = null;
@@ -176,7 +176,7 @@ const PlayerGame = (() => {
     checkProximity();
 
     // Show saved name in HUD
-    const savedName = localStorage.getItem('momexplorer_name');
+    const savedName = localStorage.getItem('wukongquest_name');
     if (savedName && typeof Story !== 'undefined') Story.updateHudName(savedName);
 
     // Speed slider

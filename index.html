@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>MOMExplorer — Mysteries of Monmouth</title>
+  <title>WukongQuest — Monkey King's Journey</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -22,7 +22,7 @@
 
   <!-- HUD overlay (top-left) -->
   <div id="hud">
-    <div id="hud-title">🔍 MOMExplorer</div>
+    <div id="hud-title">� WukongQuest</div>
     <div>Position: <span id="pos">Monmouth County</span></div>
     <div>Nearest: <span id="landmark">—</span></div>
     <div>Distance: <span id="distance">—</span></div>
@@ -45,16 +45,16 @@
   </div>
 
   <!-- Dossier button -->
-  <button id="dossier-btn">📁 Dossier <span id="dossier-count">0</span></button>
+  <button id="dossier-btn">� Scroll <span id="dossier-count">0</span></button>
 
   <!-- Proximity toast -->
-  <div id="proximity-toast" class="hidden">🔎 A mystery is near…</div>
+  <div id="proximity-toast" class="hidden">� A trial is near…</div>
 
   <!-- Case File panel (slides up from bottom) -->
   <div id="case-panel" class="hidden">
     <div id="case-panel-inner">
       <button id="case-close">✕</button>
-      <div id="case-stamp">CASE FILE</div>
+      <div id="case-stamp">TRIAL SCROLL</div>
       <h2 id="case-title"></h2>
       <div id="case-witness"></div>
       <div id="case-farrow-notes"></div>
@@ -66,14 +66,14 @@
   <!-- Intro modal (title screen, shown on every load) -->
   <div id="intro-modal" class="hidden">
     <div id="intro-inner">
-      <div id="intro-seal">🕵</div>
-      <div id="intro-from">A letter from 221B Baker Street</div>
-      <h1 id="intro-title">The Vanished Chronicler</h1>
+      <div id="intro-seal">�</div>
+      <div id="intro-from">A message from Guanyin Bodhisattva</div>
+      <h1 id="intro-title">The Monkey King's Quest</h1>
 
       <!-- Step 1: name -->
       <div id="intro-step-name">
         <div id="intro-name-row">
-          <label for="name-input">Your name, Detective:</label>
+          <label for="name-input">Your name, Disciple:</label>
           <input type="text" id="name-input" placeholder="Enter your name…" maxlength="30" autocomplete="off" />
         </div>
         <div id="intro-buttons-begin">
@@ -95,7 +95,7 @@
   <!-- Chapter banner (slides in after solving a site) -->
   <div id="chapter-banner" class="hidden">
     <div id="chapter-banner-inner">
-      <div id="chapter-label">📖 Chapter Revealed</div>
+      <div id="chapter-label">📖 Trial Conquered</div>
       <p id="chapter-text"></p>
       <button id="chapter-dismiss">Continue →</button>
     </div>
@@ -110,7 +110,7 @@
   <div id="dossier-panel" class="hidden">
     <div id="dossier-inner">
       <div class="dossier-header">
-        <h2>🗂 Detective's Dossier</h2>
+        <h2>🗂 Disciple's Scroll</h2>
         <button id="dossier-close">✕ Close</button>
       </div>
       <p id="dossier-summary"></p>
