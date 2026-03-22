@@ -158,8 +158,6 @@ function checkLandmarks() {
 }
 
 let currentLandmark = null;
-const answeredLandmarks = new Set();
-let quizActive = false;
 
 function resetQuizUI() {
   quizResult.textContent = '';
@@ -173,7 +171,7 @@ function inspectLandmark() {
   popupTitle.textContent = currentLandmark.name;
   popupText.textContent = currentLandmark.description;
 
-  const hasQuiz = currentLandmark.quiz && !answeredLandmarks.has(currentLandmark.id);
+  const hasQuiz = currentLandmark.quiz;
   startQuizBtn.classList.toggle('hidden', !hasQuiz);
   resetQuizUI();
 
@@ -182,12 +180,6 @@ function inspectLandmark() {
 
 function startQuiz() {
   if (!currentLandmark || !currentLandmark.quiz) return;
-  if (answeredLandmarks.has(currentLandmark.id)) {
-    quizResult.textContent = 'You have already uncovered the clue at this location.';
-    quizArea.classList.remove('hidden');
-    startQuizBtn.classList.add('hidden');
-    return;
-  }
 
   quizActive = true;
   startQuizBtn.classList.add('hidden');
@@ -218,7 +210,6 @@ function handleQuizAnswer(choice) {
     quizResult.style.color = '#fc8181';
   }
 
-  answeredLandmarks.add(currentLandmark.id);
   quizActive = false;
 }
 
