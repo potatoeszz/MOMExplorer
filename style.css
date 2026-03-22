@@ -3,42 +3,50 @@
 }
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f9ff;
-  color: #223;
+  font-family: 'Courier New', monospace;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  color: #e0e0e0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   padding: 14px;
 }
-#controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-#controls button {
-  background: #3b8;
-  color: #fff;
-  border: 0;
-  border-radius: 8px;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-#controls button:hover {
-  background: #2a6;
+
+p {
+  line-height: 1.6;
+  color: #cbd5e0;
 }
 
-h1 { margin: 0; }
+h1 { 
+  margin: 0; 
+  color: #fbb6ce;
+  text-shadow: 0 0 10px rgba(251, 182, 206, 0.5);
+  font-family: 'Times New Roman', serif;
+}
+
 .game-shell {
   position: relative;
   width: 900px;
   height: 600px;
-  border: 2px solid #3b6;
-  border-radius: 10px;
+  border: 2px solid #4a5568;
+  border-radius: 8px;
   overflow: hidden;
-  background: linear-gradient(180deg, #d8f0ec 0%, #eaf8ff 70%, #cfe8ea 100%);
+  background: linear-gradient(180deg, #2d3748 0%, #1a202c 70%, #2d3748 100%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(26, 32, 44, 0.3);
   transform-origin: center center;
+}
+
+.game-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(26, 32, 44, 0.3) 70%, rgba(26, 32, 44, 0.6) 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 #leafletMap {
   position: absolute;
@@ -75,28 +83,35 @@ h1 { margin: 0; }
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: rgba(0,0,0,.4);
-  color: #fff;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: .95rem;
+  background: rgba(45, 55, 72, 0.9);
+  color: #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  border: 1px solid #4a5568;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  font-family: inherit;
+  backdrop-filter: blur(2px);
 }
 #popup {
   position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.8);
+  backdrop-filter: blur(4px);
   z-index: 10;
 }
 #popup.hidden { display: none; }
 #popup-content {
   width: min(620px, 90vw);
-  background: #fff;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border: 1px solid #4a5568;
+  border-radius: 8px;
   padding: 22px;
-  box-shadow: 0 0 18px rgba(30,50,80,.4);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 60px rgba(66, 153, 225, 0.1);
   position: relative;
+  color: #e2e8f0;
 }
 #popup-close {
   position: absolute;
@@ -109,4 +124,67 @@ h1 { margin: 0; }
   width: 26px;
   height: 26px;
   cursor: pointer;
+}
+
+#popup-content h3 {
+  color: #fbb6ce;
+  margin-top: 0;
+  font-family: 'Times New Roman', serif;
+  text-shadow: 0 0 8px rgba(251, 182, 206, 0.3);
+}
+
+#popup-content button {
+  background: #2d3748;
+  color: #e2e8f0;
+  border: 1px solid #4a5568;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  margin: 4px;
+}
+
+#popup-content button:hover {
+  background: #4a5568;
+  box-shadow: 0 0 8px rgba(66, 153, 225, 0.3);
+}
+
+#quiz-choices button {
+  display: inline-block;
+  margin: 4px 8px 4px 0;
+  background: #1a202c;
+  border: 1px solid #718096;
+}
+
+#quiz-choices button:hover {
+  background: #2d3748;
+  border-color: #63b3ed;
+}
+
+#quiz-result {
+  margin-top: 12px !important;
+  font-weight: bold !important;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+small {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Detective marker pulse animation */
+@keyframes detectivePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.leaflet-interactive {
+  transition: all 0.2s ease;
+}
+
+.leaflet-interactive:hover {
+  filter: drop-shadow(0 0 6px rgba(251, 182, 206, 0.6));
 }
